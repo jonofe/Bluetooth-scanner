@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python2.7
 ''' Check python-bluez is installed on this system
  Copyright (c) 2017 Diving-91 (User:diving91 https://www.jeedom.fr/forum/)
  MIT License
@@ -9,9 +9,9 @@ import sys
 
 try:
 	import bluetooth._bluetooth
-	print("ok")
+	print "ok"
 except:
-	print("ko")
+	print "ko" 
 	sys.exit(4)
 
 sys.exit(0)
