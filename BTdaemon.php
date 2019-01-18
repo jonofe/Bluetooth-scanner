@@ -154,19 +154,24 @@ class BTScanner {
 		// Select Jeedom IP
 		do {
 			$loop = false;
-			echo "Select Jeedom IP (x.y.z.w): ";
+			echo "Select EDOMI IP (x.y.z.w): ";
 			$r = $this->readline();
 			if(!filter_var($r, FILTER_VALIDATE_IP,FILTER_FLAG_IPV4)){
 				echo "ERROR: Bad IP address\n";
 				$loop = true;
 			}
 		} while ($loop);
-		$str = "[Jeedom IP]\nip = $r\n";
+		$str = "[EDOMI IP]\nip = $r\n";
+		fwrite($handle,$str);
+		// Select EDOMI remote user
+		echo "Select EDOMI Remote User: ";
+		$r = $this->readline();
+		$str = "[EDOMI User]\nuser = $r\n";
 		fwrite($handle,$str);
 		// Select Jeedom API key
-		echo "Select Jeedom API key: ";
+		echo "Select EDOMI Password: ";
 		$r = $this->readline();
-		$str = "[Jeedom Key]\nkey = $r\n";
+		$str = "[EDOMI Password]\npwd = $r\n";
 		fwrite($handle,$str);
 		// Select iTag parameters
 		$str = "[TAGS]\n";
@@ -183,28 +188,28 @@ class BTScanner {
 				}
 			} while ($loop);
 			$str .= $tag." = ".strtoupper($r);
-			// Select Jeedom cmd id ON
+			// Select EDOMI iKO
 			do {
 				$loop = false;
-				echo "Select Jeedom cmd id ON (0,1,2,...): ";
+				echo "Select EDOMI Remote iKO: ";
 				$r = $this->readline();
 				if (!ctype_digit($r)) {
-					echo "ERROR: Bad Jeedom cmd id ON\n";
+					echo "ERROR: Bad EDOMI Remote iKO\n";
 					$loop = true;
 				}
 			} while ($loop);
 			$str .= ",".$r;
-			// Select Jeedom cmd id OFF
-			do {
-				$loop = false;
-				echo "Select Jeedom cmd id OFF (0,1,2,...): ";
-				$r = $this->readline();
-				if (!ctype_digit($r)) {
-					echo "ERROr: Bad Jeedom cmd id OFF\n";
-					$loop = true;
-				}
-			} while ($loop);
-			$str .= ",".$r;
+// 			// Select Jeedom cmd id OFF
+// 			do {
+// 				$loop = false;
+// 				echo "Select Jeedom cmd id OFF (0,1,2,...): ";
+// 				$r = $this->readline();
+// 				if (!ctype_digit($r)) {
+// 					echo "ERROr: Bad Jeedom cmd id OFF\n";
+// 					$loop = true;
+// 				}
+// 			} while ($loop);
+// 			$str .= ",".$r;
 			// Select BT or BLE device
 			do {
 				echo "Select Device Type (BT/BLE): ";
