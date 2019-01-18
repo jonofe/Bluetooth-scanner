@@ -329,7 +329,7 @@ class BTScanner {
 
 		$this->_adapter = $config['adapter']['hci'];
 		// http://192.168.1.xxx/core/api/jeeApi.php?apikey=yourkey&type=cmd&id=
-		$this->_edomiurl = "http://".$config['EDOMI IP']['ip']."/remote/?login=".$config['EDOMI User']."&pass=".$config['EDOMI Password']."&koid=";
+		$this->_edomiurl = "http://".$config['EDOMI IP']['ip']."/remote/?login=".$config['EDOMI User']['user']."&pass=".$config['EDOMI Password']['pwd']."&koid=";
 		$this->_log =$config['logs']['log']; 
 		// For each tag array[mac] = array(ID on, ID Off, State) - State by default set to 0 (absent)
 		foreach ($config['TAGS'] as $tag) {

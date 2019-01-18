@@ -62,9 +62,9 @@ me = os.path.basename(__file__)
 
 # Check 5 args are supplied or 1 arg 'kill'
 if not(len(sys.argv) == 6) and not(len(sys.argv) == 2 and sys.argv[1] =='kill'):
-	print "ERROR: Please use arguments"
-	print "$ python "+me+" adapterNb processUser phpcallback debug jsonTagsBdaddr"
-	print "$ python "+me+" kill"
+	print("ERROR: Please use arguments")
+	print("$ python "+me+" adapterNb processUser phpcallback debug jsonTagsBdaddr")
+	print("$ python "+me+" kill")
 	sys.exit(1)
 elif len(sys.argv) == 6: # ARG4: define logging level
 	FORMAT = '%(asctime)s - %(message)s'
@@ -75,7 +75,7 @@ elif len(sys.argv) == 6: # ARG4: define logging level
 		logLevel=logging.CRITICAL	
 		logging.basicConfig(format=FORMAT,level=logLevel)
 	else:
-		print "ERROR: Wrong logging level supplied - Use 0 or 1"
+		print("ERROR: Wrong logging level supplied - Use 0 or 1")
 		sys.exit(1)
 
 def packed_bdaddr_to_string(bdaddr_packed):
@@ -100,11 +100,11 @@ if sys.argv[1] == "kill": #Kill mode
 	x = list(set(x).difference([str(os.getpid())])) # all processes but current one
 	if x:
 		x = int(x[0]) # convert to pid
-		print 'Kill %s process %i'%(me,x)
+		print('Kill %s process %i'%(me,x))
 		os.system("sudo kill %i" % (x))
 		sys.exit(0)
 	else:
-		print 'There is no %s process to kill'%(me)
+		print('There is no %s process to kill'%(me))
 		sys.exit(0)
 else: # define hci adapter
 	try:
