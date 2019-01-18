@@ -57,7 +57,7 @@ class BTScanner {
 	private $_cfgfile = 'BT.ini';
 	// from cfgfile
 	private $_adapter; 		// BT adapter eg: hci0
-	private $_jeedomurl;		// Base URL jeedom API 
+	private $_edomiurl;		// Base URL jeedom API 
 	private $_log;			// Boolean to log BT ativity in $_logfile
 	private $_tags;			// Array of BT tags with the parameter BT MAC,Jeedom CmdON,Jeedom CmdOFF,State (0=absent,1=present,x=timestamp since not detected)
 
@@ -263,14 +263,14 @@ class BTScanner {
 					//echo $key."->".$device['last']."\n";
 					// device not found and marked as present
 					if (($device['state'] == 1) and ((time() - $device['last']) > $this->_timeOut)) {
-						$this->callJedoomUrl($device['off']);
+						$this->callEdomiUrl($device['iKO'],0);
 						$this->_tags[$key]['state'] = 0;
 						$this->dbg("Inactive Tag found: $key\n");
 						$this->log("$key inactive\n");
 					}
 					// device found and marked as not present
 					else if (($device['state'] == 0) and ((time() - $device['last']) <= $this->_timeOut)) {
-						$this->callJedoomUrl($device['on']);
+						$this->callEdomiUrl($device['iKO'],1);
 						$this->_tags[$key]['state'] = 1;
 						$this->dbg("Active Tag found: $key\n");
 						$this->log("$key ACTIVE\n");
@@ -284,14 +284,14 @@ class BTScanner {
 					}
 					// device not found and marked as timestamp transition
 					else if (empty($x) and ((time() - $device['state']) > $this->_timeOut) and $device['state'] != 0) {
-						$this->callJedoomUrl($device['off']);
+						$this->callEdomiUrl($device['iKO'],0);
 						$this->_tags[$key]['state'] = 0;
 						$this->dbg("Inactive Tag found: $key\n");
 						$this->log("$key inactive\n");
 					}
 					// device found and marked as not present
 					else if (!empty($x) and $device['state'] == 0) {
-						$this->callJedoomUrl($device['on']);
+						$this->callEdomiUrl($device['iKO'],1);
 						$this->_tags[$key]['state'] = 1;
 						$this->dbg("Active Tag found: $key\n");
 						$this->log("$key ACTIVE\n");
@@ -329,18 +329,18 @@ class BTScanner {
 
 		$this->_adapter = $config['adapter']['hci'];
 		// http://192.168.1.xxx/core/api/jeeApi.php?apikey=yourkey&type=cmd&id=
-		$this->_jeedomurl = "http://".$config['Jeedom IP']['ip']."/core/api/jeeApi.php?apikey=".$config['Jeedom Key']['key']."&type=cmd&id=";
+		$this->_edomiurl = "http://".$config['EDOMI IP']['ip']."/remote/?login=".$config['EDOMI User']."&pass=".$config['EDOMI Password']."&koid=";
 		$this->_log =$config['logs']['log']; 
 		// For each tag array[mac] = array(ID on, ID Off, State) - State by default set to 0 (absent)
 		foreach ($config['TAGS'] as $tag) {
 			$tagData = explode(",",$tag);
-			$this->_tags[$tagData[0]] = array("on" => $tagData[1], "off" => $tagData[2],"state" => 0, "ble" => $tagData[3]);
+			$this->_tags[$tagData[0]] = array("iKO" => $tagData[1], "state" => 0, "ble" => $tagData[2]);
 			//For BLE devices add a last Seen field
-			if ($tagData[3] == '1') {$this->_tags[$tagData[0]] = array_merge($this->_tags[$tagData[0]],array("last" => 0));}
+			if ($tagData[2] == '1') {$this->_tags[$tagData[0]] = array_merge($this->_tags[$tagData[0]],array("last" => 0));}
 		}
 		$nbTags = count($this->_tags);
 		$this->dbg("Adapter: $this->_adapter\n");
-		$this->dbg("Jeedom base url: $this->_jeedomurl\n");
+		$this->dbg("EDOMI base url: $this->_edomiurl\n");
 		$this->dbg("logs: $this->_log\n");
 		$this->dbg("Amount of BT tags: $nbTags\n");
 
@@ -348,10 +348,10 @@ class BTScanner {
 		$this->checkHCI($this->_adapter);
 	}
 
-	// Call Jeedom specified URL
-	private function callJedoomUrl($id) {
-		//echo "$this->_jeedomurl"."$id\n";
-		$r = file_get_contents("$this->_jeedomurl"."$id");
+	// Call EDOMI specified URL
+	private function callEdomiUrl($iKO,$value) {
+		//echo "$this->_edomiurl"."$id\n";
+		$r = file_get_contents("$this->_edomiurl"."$iKO&kovalue=$value");
 		if (!empty($r)) { $this->dbg("URL call ERROR: $r\n"); }
 		else { $this->dbg("URL call succesfully for ID: $id\n"); }
 	}
