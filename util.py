@@ -9,9 +9,9 @@ import sys
 
 try:
 	import bluetooth._bluetooth
-	print "ok"
+	print("ok")
 except:
-	print "ko"
+	print("ko")
 	sys.exit(4)
 
 sys.exit(0)
