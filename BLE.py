@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python2.7
 ''' Bluetooth scanner inspired by and modified to run with php script for non BLE devices
    Author: jmleglise
    Date: 25-May-2016
