@@ -104,8 +104,9 @@ class BTScanner {
 				echo "ERROR FORK MAIN\n";
 			}
 			if (!$pid) {
+			    $this->_startTime = time();
 				if ($i==1) $this->threadBTScanner();
-				if ($i==2) { $this->_startTime = time(); $this->threadBLEScanner();}
+				if ($i==2)  $this->threadBLEScanner();
 				exit(0);
 			}
 		}
@@ -264,6 +265,7 @@ class BTScanner {
 					//echo $key."->".$device['last']."\n";
 					// device not found and marked as present
 //					if (($device['state'] == 1) and ((time() - $device['last']) > $this->_timeOut)) {
+				    $this->dbg("StartTime: $this->startTime\n");
 				    if ((time() - $this->_startTime > $this->_timeOut) && (time() - $device['last']) > $this->_timeOut) {
 						$this->callEdomiUrl($device['iKO'],0);
 						$this->_tags[$key]['state'] = 0;
