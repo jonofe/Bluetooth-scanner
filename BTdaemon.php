@@ -65,6 +65,7 @@ class BTScanner {
 	private $_shm_id;		// Share memory ID (used for the python callback)
 	
 	private $_loopTime = 1;		// BT scan loop time
+	private $_startTime = 0;
 	private $_timeOut = 60;	// Time is seconds before a tag is considered as absent - Use large value to avoid false absence detection
 	private $_debug;		// For debug purpose - Settled at Class construct time
 
@@ -104,7 +105,7 @@ class BTScanner {
 			}
 			if (!$pid) {
 				if ($i==1) $this->threadBTScanner();
-				if ($i==2) $this->threadBLEScanner();
+				if ($i==2) { $this->_startTime = time(); $this->threadBLEScanner();}
 				exit(0);
 			}
 		}
@@ -263,7 +264,7 @@ class BTScanner {
 					//echo $key."->".$device['last']."\n";
 					// device not found and marked as present
 //					if (($device['state'] == 1) and ((time() - $device['last']) > $this->_timeOut)) {
-				    if ((time() - $device['last']) > $this->_timeOut) {
+				    if ((time() - $this->_startTime > $this->_timeOut) && (time() - $device['last']) > $this->_timeOut) {
 						$this->callEdomiUrl($device['iKO'],0);
 						$this->_tags[$key]['state'] = 0;
 						$this->dbg("Inactive Tag found: $key\n");
