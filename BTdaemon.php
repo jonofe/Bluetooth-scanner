@@ -262,7 +262,8 @@ class BTScanner {
 				if ($device['ble'] == 1) { // CODE for BLE devices
 					//echo $key."->".$device['last']."\n";
 					// device not found and marked as present
-					if (($device['state'] == 1) and ((time() - $device['last']) > $this->_timeOut)) {
+//					if (($device['state'] == 1) and ((time() - $device['last']) > $this->_timeOut)) {
+				    if ((time() - $device['last']) > $this->_timeOut) {
 						$this->callEdomiUrl($device['iKO'],0);
 						$this->_tags[$key]['state'] = 0;
 						$this->dbg("Inactive Tag found: $key\n");
