@@ -27,7 +27,7 @@
 */
 
 // Modify according to your need
-$debug = false; //true for debug mode, false for production mode
+$debug = true; //true for debug mode, false for production mode
 
 /*
 * Class BTScanner purpose: Scan Bluetooth devices (BLE or not) on the network and notify a controller when registered devices are in range
