@@ -19,9 +19,8 @@ $ php BTdaemon.php conf -> Start configuration of your Bluetooth devices and EDO
 
 *	Tested with:<br/>
 Raspberry PI 3 - Raspbian Stretch<br/> 
-BLE devices: Gigaset g-Tag<br/>
-			 Gigaset Keeper<br/>
-BT devices: Samsung Galaxy S5, LG G3, iPhone 6s<br/>
+BLE devices: Gigaset g-Tag, Gigaset Keeper<br/>
+BT devices: none so far<br/>
 
 * Link with the EDOMI<br/>
 Define a Remote iKO per BT device you want to track<br/>
