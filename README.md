@@ -37,4 +37,5 @@ For each registered devices, the EDOMI Remote iKO will be asked and stored into 
 https://knx-user-forum.de/forum/projektforen/edomi<br/>
 User: jonofe<br/>
 
-<img src=https://github.com/jonofe/Bluetooth-scanner/blob/master/images/keeper1.jpg> <img src=https://github.com/jonofe/Bluetooth-scanner/blob/master/images/keeper2.jpg> 
+<img src=https://github.com/jonofe/Bluetooth-scanner/blob/master/images/gtag.jpg>
+<img src=https://github.com/jonofe/Bluetooth-scanner/blob/master/images/keeper1.jpg>  
