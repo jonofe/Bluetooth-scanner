@@ -38,5 +38,3 @@ https://knx-user-forum.de/forum/projektforen/edomi<br/>
 User: jonofe<br/>
 
 <img src=https://github.com/jonofe/Bluetooth-scanner/blob/master/images/keeper1.jpg> <img src=https://github.com/jonofe/Bluetooth-scanner/blob/master/images/keeper2.jpg> 
-<img src=https://github.com/jonofe/Bluetooth-scanner/blob/master/images/onNut.png> <img src=https://github.com/jonofe/Bluetooth-scanner/blob/master/images/noITAG.png> 
-
