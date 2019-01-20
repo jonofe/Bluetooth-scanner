@@ -18,15 +18,12 @@ $ php BTdaemon.php stop -> Stop daemon<br/>
 $ php BTdaemon.php conf -> Start configuration of your Bluetooth devices and EDOMI Remote API calls<br/>
 
 *	Tested with:<br/>
-Raspberry PI 2 - Raspbian Jessie<br/>
-BLE devices: Nut mini (https://goo.gl/l36Gtz)<br/>
-			 Gigaset g-Tag<br/>
+Raspberry PI 3 - Raspbian Stretch<br/> 
+BLE devices: Gigaset g-Tag<br/>
 			 Gigaset Keeper<br/>
 BT devices: Samsung Galaxy S5, LG G3, iPhone 6s<br/>
-Does NOT work with iTags (https://goo.gl/ENNL71): Since those devices are switching off when not connected, they can't be used for presence detection<br/>
-Bluetooth adapter: https://goo.gl/e52VTZ<br/>
 
-* Link with the controller<br/>
+* Link with the EDOMI<br/>
 Define a Remote iKO per BT device you want to track<br/>
 When started in configuration mode, the script will ask for the list of Bluetooth devices to monitor (via their BT Mac address)<br/>
 For each registered devices, the EDOMI Remote iKO will be asked and stored into a BLE.ini file<br/>
