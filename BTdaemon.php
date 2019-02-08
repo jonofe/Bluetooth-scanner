@@ -42,7 +42,7 @@ $debug = true;
  * Configuration:
  * Debug mode is selected when an instance of this class is created $bt = new BTScanner(debug_mode)
  * It is adviced to start in debug mode to check evything is fine, then turn debug off
- * Before a device is considered as absent, it must be undetected during an adjustable timeout ($_timeOut)
+ * Before a device is considered as absent, it must be undetected during an adjustable timeout ($_timeout)
  *
  * Tested with:
  * Raspberry PI 2 - Raspian Jessie / Should be Ok for PI 3 with built-in Bluetooth as well
@@ -89,7 +89,7 @@ class BTScanner
     // BT scan loop time
     private $_startTime = 0;
 
-    private $_timeOut = 60;
+    private $_timeout = 60;
 
     // Time is seconds before a tag is considered as absent - Use large value to avoid false absence detection
     private $_debug;
@@ -241,17 +241,17 @@ class BTScanner
                 }
             } while ($loop);
             $str .= "," . $r;
-            // // Select Jeedom cmd id OFF
-            // do {
-            // $loop = false;
-            // echo "Select Jeedom cmd id OFF (0,1,2,...): ";
-            // $r = $this->readline();
-            // if (!ctype_digit($r)) {
-            // echo "ERROr: Bad Jeedom cmd id OFF\n";
-            // $loop = true;
-            // }
-            // } while ($loop);
-            // $str .= ",".$r;
+            // Select timeout for iKO
+            do {
+                $loop = false;
+                echo "Select Timeout value (in seconds) for absence detection: ";
+                $r = $this->readline();
+                if (! ctype_digit($r)) {
+                    echo "ERROR: Bad timeout value\n";
+                    $loop = true;
+                }
+            } while ($loop);
+            $str .= "," . $r;
             // Select BT or BLE device
             do {
                 echo "Select Device Type (BT/BLE): ";
@@ -312,16 +312,16 @@ class BTScanner
                 if ($device['ble'] == 1) { // CODE for BLE devices
                                            // echo $key."->".$device['last']."\n";
                                            // device not found and marked as present
-                                           // if (($device['state'] == 1) and ((time() - $device['last']) > $this->_timeOut)) {
+                                           // if (($device['state'] == 1) and ((time() - $device['last']) > $this->_timeout)) {
                                            
-                    if (($start && time() - $this->_startTime > $this->_timeOut) || ($this->_tags[$key]['state'] == 1 && (time() - $device['last']) > $this->_timeOut)) {
+                    if (($start && time() - $this->_startTime > $device['timeout']) || ($this->_tags[$key]['state'] == 1 && (time() - $device['last']) > $device['timeout'])) {
                         $start = false;
                         $this->callEdomiUrl($device['iKO'], 0);
                         $this->_tags[$key]['state'] = 0;
                         $this->dbg("Inactive Tag found: $key\n");
                         $this->log("$key inactive\n");
                     } // device found and marked as not present
-                    else if (($device['state'] == 0) and ((time() - $device['last']) <= $this->_timeOut)) {
+                    else if (($device['state'] == 0) and ((time() - $device['last']) <= $device['timeout'])) {
                         $start = false;
                         $this->callEdomiUrl($device['iKO'], 1);
                         $this->_tags[$key]['state'] = 1;
@@ -334,7 +334,7 @@ class BTScanner
                     if (empty($x) and $device['state'] == 1) {
                         $this->_tags[$key]['state'] = time();
                     } // device not found and marked as timestamp transition
-                    else if (empty($x) and ((time() - $device['state']) > $this->_timeOut) and $device['state'] != 0) {
+                    else if (empty($x) and ((time() - $device['state']) > $device['timeout']) and $device['state'] != 0) {
                         $this->callEdomiUrl($device['iKO'], 0);
                         $this->_tags[$key]['state'] = 0;
                         $this->dbg("Inactive Tag found: $key\n");
@@ -390,10 +390,11 @@ class BTScanner
             $this->_tags[$tagData[0]] = array(
                 "iKO" => $tagData[1],
                 "state" => 0,
-                "ble" => $tagData[2]
+                "timeout" => $tagData[2],
+                "ble" => $tagData[3]
             );
             // For BLE devices add a last Seen field
-            if ($tagData[2] == '1') {
+            if ($tagData[3] == '1') {
                 $this->_tags[$tagData[0]] = array_merge($this->_tags[$tagData[0]], array(
                     "last" => 0
                 ));
